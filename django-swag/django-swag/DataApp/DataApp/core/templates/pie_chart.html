@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block content %}
+
+<nav>
+  <a href="{% url 'home' %}">Bar Chart</a>
+  <a href="{% url 'pie-chart' %}" class="active">Pie Chart</a>
+  <a href="{% url 'polar' %}">Polar</a>
+</nav>
+
+<div id="container" style="width: 75%;">
+  <canvas id="pie-chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+
+  function getColors(l) {
+    var defaultColors = ["rgba(244, 114, 33, .75)", "rgba(16, 115, 203, .75)"];
+      var colors = [];
+      for (i = 0; i < l; i++) {
+        colors.push(defaultColors[i % defaultColors.length]);
+      }
+      return colors;
+    }
+
+      var pie = {
+        type: 'pie',
+        data: {
+          datasets: [{
+            data: {{ data|safe }},
+            backgroundColor: getColors(5),
+            label: 'Population'
+          }],
+          labels: {{ labels|safe }}
+        },
+        options: {
+          responsive: true
+        }
+      };
+
+      window.onload = function() {
+        var ctx = document.getElementById('pie-chart').getContext('2d');
+        window.myPie = new Chart(ctx, pie);
+      };
+</script>
+
+{% endblock %}

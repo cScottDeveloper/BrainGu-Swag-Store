@@ -1,0 +1,6 @@
+# allows us to isolate all the things we are about to deploy
+# into a single group
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx

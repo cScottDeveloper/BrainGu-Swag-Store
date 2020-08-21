@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: two
+  namespace: two
+spec:
+  # type: ExternalName
+  # externalName: two.two.svc.cluster.local
+  selector:
+      app: two
+  ports:
+  - protocol: TCP
+    targetPort: 80
+    port: 80

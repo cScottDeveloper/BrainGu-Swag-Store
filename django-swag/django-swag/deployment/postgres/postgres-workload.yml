@@ -1,0 +1,107 @@
+# deploy pgadmin-workload.yml after deploying this file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  selector:
+   matchLabels:
+    app: postgres
+  replicas: 1
+  # start of pod specs config file
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          imagePullPolicy: "IfNotPresent"
+          env:
+          - name: POSTGRES_USER
+            valueFrom: 
+              secretKeyRef: 
+                name: postgres-secret
+                key: postgres-root-username
+          - name: POSTGRES_PASSWORD
+            valueFrom: 
+              secretKeyRef: 
+                name: postgres-secret
+                key: postgres-root-password
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          volumeMounts:
+          # this path is the location that the data will be stored in the container
+            - mountPath: /var/lib/postgresql/data
+              # must match volumes name given directly below.
+              name: postgres-pv-storage
+      # connecting the volume to the pod
+      volumes:
+        - name: postgres-pv-storage
+          # from the pods point of view, the claim is the volume
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+---
+# generally a standard persistent volume for local storage
+    kind: PersistentVolume
+    apiVersion: v1
+    metadata:
+      name: postgres-pv-volume
+      labels:
+        type: local
+        app: postgres
+    spec:
+    # used for dynamic provisioning
+      storageClassName: manual
+      capacity:
+      # storage taken locally
+        storage: 5Gi
+      accessModes:
+        - ReadWriteMany
+      hostPath:
+        path: "/mnt/data"
+---
+# Pod has a persistent volume claim that looks for a persistent volume that 
+# satisfies the claims requirements. If the control plane finds a suitable PersistentVolume
+# with the same StorageClass, it binds the claim to the volume. (Status = bound)
+    kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: postgres-pv-claim
+      labels:
+        app: postgres
+    spec:
+    # used for dynamic provisioning
+      storageClassName: manual
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 5Gi
+    
+---
+
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: postgres-config
+      labels:
+        app: postgres
+    data:
+      POSTGRES_DB: postgresdb
+
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgres
+      labels:
+        app: postgres
+    spec:
+       ports:
+        - name: postgres
+          port: 5432
+       selector:
+        app: postgres

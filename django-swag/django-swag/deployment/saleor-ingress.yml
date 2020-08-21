@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: braingustorefront.info
+    http:
+      paths:
+      - path: /pgadmin
+        pathType: Prefix
+        backend:
+          serviceName: pgadmin
+          servicePort: 80
+      - path: /storefront
+        pathType: Prefix
+        backend:
+          serviceName: storefront-service
+          servicePort: 3000
+      - path: /dashboard
+        pathType: Prefix
+        backend:
+          serviceName: dashboard-service
+          servicePort: 9000
+

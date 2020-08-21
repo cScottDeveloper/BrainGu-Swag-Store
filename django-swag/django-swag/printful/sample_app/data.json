@@ -1,0 +1,15 @@
+{
+  "code": 200,
+  "result": [
+    {
+      "id": 185768984,
+      "external_id": "5f16e5e24f2325",
+      "name": "Cactus Unisex Hoodie",
+      "variants": 7,
+      "synced": 7,
+      "thumbnail_url": "https://files.cdn.printful.com/files/dac/dacf80185d111a5142455848ced0494e_preview.png"
+    }
+  ],
+  "extra": [],
+  "paging": { "total": 1, "offset": 0, "limit": 20 }
+}

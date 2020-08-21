@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Data Viz Example{% endblock %}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: url("/static/bg-background.jpg") 50% 0 no-repeat fixed;
+        margin: 25px 25px;
+        font-family: "Montserrat", sans-serif;
+      }
+      h1 {
+        color: #143d67;
+        font-family: "Montserrat", sans-serif;
+      }
+      h3 {
+        color: #1073cb;
+      }
+      a {
+        background-color: #f47221;
+        border: none;
+        color: #143d67;
+        padding: 12px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      a:hover {
+        background-color: #143d67;
+        color: #f47221;
+      }
+      .active {
+        background-color: #143d67;
+        color: #f47221;
+      }
+    </style>
+  </head>
+  <body>
+    {% load static %}
+    <h1>Data Visualization Example</h1>
+    <h3>Using Chart.js</h3>
+    {% block content %}{% endblock %}
+  </body>
+</html>

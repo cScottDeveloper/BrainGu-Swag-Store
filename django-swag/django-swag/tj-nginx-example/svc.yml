@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+  labels:
+    app: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+  - name: "http-nginx"
+    protocol: TCP
+    targetPort: 80
+    port: 80
